@@ -1,0 +1,15 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:${IMAGE_TAG:?IMAGE_TAG}
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=${PASSWORD:?PASSWORD}
+    logging:
+      driver: json-file
+      options:
+        max-size: ${LOG_MAX_SIZE:?LOG_MAX_SIZE}
+    ports:
+      - ${PORT:?PORT}:5432
+    volumes:
+      - ${VOLUMES_BASE:?VOLUMES_BASE}/postgres/data:/var/lib/postgresql/data
