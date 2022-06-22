@@ -13,4 +13,4 @@ services:
     ports:
       - ${PORT:?PORT}:5432
     volumes:
-      - ${VOLUMES_BASE:?VOLUMES_BASE}/postgres/data:/var/lib/postgresql/data
+      - ${VOLUMES_BASE:?VOLUMES_BASE}/data:/var/lib/postgresql/data
