@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+ERROR_INVALID_ARGUMENTS=1
+
+this="$0"
+hostname="$1"
+target="$2"
+
+usage() {
+  echo -e "${this} <hostname> <target>"
+  echo -e "\thostname: Hostname"
+  echo -e "\ttarget: Proxy target, e.g. 1.2.3.4:8080"
+}
+
+[[ $# -ne 2 ]] && usage && exit ${ERROR_INVALID_ARGUMENTS}
+
+echo "server {"
+echo "  listen 80;"
+echo "  server_name ${hostname};"
+echo ""
+echo "  location /.well-known/acme-challenge/ {"
+echo "    root /var/www/certbot;"
+echo "  }"
+echo "  location / {"
+echo '    return 301 https://$host$request_uri;'
+echo "  }"
+echo "}"
+echo ""
+echo "server {"
+echo "  listen 443 ssl;"
+echo "  server_name ${hostname};"
+echo ""
+echo "  ssl_certificate /etc/letsencrypt/live/${hostname}/fullchain.pem;"
+echo "  ssl_certificate_key /etc/letsencrypt/live/${hostname}/privkey.pem;"
+echo ""
+echo "  include /etc/letsencrypt/options-ssl-nginx.conf;"
+echo "  ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;"
+echo ""
+echo "  location / {"
+echo '    proxy_set_header Host $host;'
+echo '    proxy_set_header X-Real-IP $remote_addr;'
+echo '    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;'
+echo '    proxy_set_header X-Forwarded-Proto $scheme;'
+echo "  "
+echo "    proxy_pass http://${target};"
+echo "    proxy_read_timeout 90;"
+echo "  "
+echo "    proxy_redirect http://${target} https://${hostname};"
+echo "  }"
+echo "}"

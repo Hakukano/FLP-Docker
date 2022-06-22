@@ -1,0 +1,30 @@
+version: '3'
+services:
+  nginx:
+    container_name: flp-nginx
+    image: nginx:${IMAGE_TAG_NGINX:?IMAGE_TAG_NGINX}
+    restart: always
+    logging:
+      driver: json-file
+      options:
+        max-size: ${LOG_MAX_SIZE:?LOG_MAX_SIZE:?LOG_MAX_SIZE}
+    ports:
+      - ${PORT_NGINX_HTTP:?PORT_NGINX_HTTP}:80
+      - ${PORT_NGINX_HTTPS:?PORT_NGINX_HTTPS}:443
+    volumes:
+      - ${VOLUMES_BASE_NGINX:?VOLUMES_BASE_NGINX}/conf.d:/etc/nginx/conf.d
+      - ${VOLUMES_BASE_CERTBOT:?VOLUMES_BASE_CERTBOT}/conf:/etc/letsencrypt
+      - ${VOLUMES_BASE_CERTBOT:?VOLUMES_BASE_CERTBOT}/www:/var/www/certbot
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+  certbot:
+    container_name: flp-certbot
+    image: certbot/certbot
+    restart: always
+    logging:
+      driver: json-file
+      options:
+        max-size: ${LOG_MAX_SIZE:?LOG_MAX_SIZE:?LOG_MAX_SIZE}
+    volumes:
+      - ${VOLUMES_BASE_CERTBOT:?VOLUMES_BASE_CERTBOT}/conf:/etc/letsencrypt
+      - ${VOLUMES_BASE_CERTBOT:?VOLUMES_BASE_CERTBOT}/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
