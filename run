@@ -12,6 +12,7 @@ op="$2"
 usage() {
   echo -e "${this} <app> <operator>"
   echo -e "\tapp"
+  echo -e "\t\tnginx: Nginx"
   echo -e "\t\tpostgres: Postgresql"
   echo -e "\toperator"
   echo -e "\t\tps: Status of app"
