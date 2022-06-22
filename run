@@ -14,9 +14,10 @@ usage() {
   echo -e "\tapp"
   echo -e "\t\tpostgres: Postgresql"
   echo -e "\toperator"
-  echo -e "\t\tup: Start docker image"
-  echo -e "\t\tdown: Stop docker image"
-  echo -e "\t\trestart: Stop and Start docker image"
+  echo -e "\t\tps: Status of app"
+  echo -e "\t\tup: Start docker app"
+  echo -e "\t\tdown: Stop docker app"
+  echo -e "\t\trestart: Stop and Start docker app"
 }
 
 [[ $# -ne 2 ]] && usage && exit ${ERROR_INVALID_ARGUMENTS}
@@ -24,7 +25,7 @@ usage() {
 [[ ! -d "./${app}" ]] && echo "Unknown app ${app}" && exit ${ERROR_UNKNOWN_APP}
 
 case ${op} in
-  up|down|restart)
+  ps|up|down|restart)
     ;;
   *)
     echo "Unknown operator ${op}"
@@ -35,6 +36,9 @@ esac
 pushd "./${app}"
 [[ ! -f ".env" ]] && echo "No .env found in `pwd`" && popd && exit ${ERROR_NO_ENV}
 case ${op} in
+  ps)
+    docker-compose ps
+    ;;
   up)
     docker-compose up -d
     ;;
