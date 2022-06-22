@@ -13,8 +13,6 @@ VOLUMES_BASE=
 ```
 
 # nginx\_certbot
-1. Run confgen to generate nginx configuration
-1. Run init-letsencrypt.sh for first time setup
 
 ## .env
 ```
