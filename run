@@ -37,16 +37,16 @@ pushd "./${app}"
 [[ ! -f ".env" ]] && echo "No .env found in `pwd`" && popd && exit ${ERROR_NO_ENV}
 case ${op} in
   ps)
-    docker-compose ps
+    docker compose ps
     ;;
   up)
-    docker-compose up -d
+    docker compose up -d
     ;;
   down)
-    docker-compose down
+    docker compose down
     ;;
   restart)
-    docker-compose down && docker-compose up -d
+    docker compose down && docker compose up -d
     ;;
   *)
     echo "Unknown operator ${op}"
