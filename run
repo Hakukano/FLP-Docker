@@ -14,6 +14,7 @@ usage() {
   echo -e "\tapp"
   echo -e "\t\tnginx: Nginx"
   echo -e "\t\tpostgres: Postgresql"
+  echo -e "\t\twordpress: Wordpress + Mysql"
   echo -e "\toperator"
   echo -e "\t\tps: Status of app"
   echo -e "\t\tup: Start docker app"

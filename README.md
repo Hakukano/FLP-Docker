@@ -22,3 +22,16 @@ PORT_HTTP=
 PORT_HTTPS=
 VOLUMES_BASE=
 ```
+
+# wordpress
+
+## .env
+```
+IMAGE_TAG_DB= # e.g. 5
+DB_PASSWORD_ROOT=
+LOG_MAX_SIZE= # e.g. 100m
+VOLUMES_BASE_DB=
+IMAGE_TAG= # e.g. 6
+PORT=
+VOLUMES_BASE=
+```

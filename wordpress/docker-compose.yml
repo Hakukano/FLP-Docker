@@ -1,0 +1,36 @@
+version: "3"
+services:
+  db:
+    container_name: flp-wordpress-db
+    image: mysql:${IMAGE_TAG_DB:?IMAGE_TAG_DB}
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD_ROOT:?DB_PASSWORD_ROOT}
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    logging:
+      driver: json-file
+      options:
+        max-size: ${LOG_MAX_SIZE:?LOG_MAX_SIZE}
+    volumes:
+      - ${VOLUMES_BASE_DB:?VOLUMES_BASE_DB}/data:/var/lib/mysql
+  wordpress:
+    container_name: flp-wordpress
+    depends_on:
+      - db
+    image: wordpress:${IMAGE_TAG:?IMAGE_TAG}
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    logging:
+      driver: json-file
+      options:
+        max-size: ${LOG_MAX_SIZE:?LOG_MAX_SIZE}
+    ports:
+      - ${PORT:?PORT}:80
+    volumes:
+      - ${VOLUMES_BASE:?VOLUMES_BASE}/html:/var/www/html
