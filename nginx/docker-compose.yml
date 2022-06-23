@@ -13,3 +13,4 @@ services:
       - ${PORT_HTTPS:?PORT_HTTPS}:443
     volumes:
       - ${VOLUMES_BASE:?VOLUMES_BASE}/conf.d:/etc/nginx/conf.d
+      - ${VOLUMES_BASE:?VOLUMES_BASE}/certs:/etc/certs
